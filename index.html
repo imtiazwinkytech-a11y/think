@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Digital Marketing Quiz - 100 Marks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for aesthetic appeal and responsiveness */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 1.5rem 0;
+        }
+        .quiz-container {
+            max-width: 95%;
+            width: 800px;
+            background-color: white;
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1), 0 0 10px -5px rgba(0, 0, 0, 0.05);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 1rem 0;
+        }
+        .question-card {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .question-card:hover {
+            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.08);
+            border-color: #a855f7; /* Tailwind purple-500 */
+        }
+        .choice-label {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+        .choice-label:hover {
+            background-color: #f5f3ff; /* Tailwind purple-50 */
+        }
+        input[type="radio"]:checked + span {
+            background-color: #ede9fe; /* Tailwind purple-100 */
+            border-color: #8b5cf6; /* Tailwind purple-600 */
+            color: #4c1d95; /* Tailwind purple-900 */
+            font-weight: 600;
+            box-shadow: 0 0 0 2px #c4b5fd;
+        }
+        /* Hide default radio button */
+        input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .submit-button {
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+        }
+        .submit-button:hover {
+            background-color: #7c3aed; /* purple-600 */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px -3px rgba(124, 58, 237, 0.5);
+        }
+        .submit-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="quiz-container">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-purple-700 mb-2">Smart Digital Marketing Quiz</h1>
+        <p class="text-center text-gray-500 mb-6">A 60-Question, 100-Mark Assessment</p>
+
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded-lg shadow-sm">
+            <h2 class="font-bold text-lg mb-1">Grading Scheme (CRITICAL)</h2>
+            <ul class="list-disc list-inside text-sm ml-2">
+                <li>**Total Marks: 100** (60 Questions)</li>
+                <li>**Correct Answer:** +1.6667 Marks (approx. 100/60)</li>
+                <li>**Incorrect Answer:** **-0.5 Marks** (Negative Marking)</li>
+                <li>**Unattempted:** 0 Marks</li>
+            </ul>
+        </div>
+
+        <!--
+            CRITICAL FOR NETLIFY FORMS:
+            1. Form must have a 'name' attribute.
+            2. Form must have the 'data-netlify="true"' attribute.
+        -->
+        <form name="smart_quiz_assessment" method="POST" data-netlify="true" id="quizForm" onsubmit="return handleSubmit(event)" class="space-y-6">
+            <input type="hidden" name="form-name" value="smart_quiz_assessment" />
+            
+            <!-- Hidden field for the final score, populated by JavaScript -->
+            <input type="hidden" name="final-score-calculated" id="finalScoreInput" value="0">
+
+            <!-- Examinee Details Section -->
+            <div class="bg-purple-50 p-6 rounded-xl shadow-inner mb-8 space-y-4">
+                <h2 class="text-xl font-bold text-purple-800 border-b pb-2 mb-4">Examinee Details (Required)</h2>
+                
+                <div>
+                    <label for="examineeName" class="block text-sm font-medium text-gray-700 mb-1">Examinee Name:</label>
+                    <input type="text" id="examineeName" name="examineeName" required class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 p-3" placeholder="Enter Full Name">
+                </div>
+
+                <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 p-3" placeholder="Enter Contact Number (e.g., 9876543210)">
+                </div>
+            </div>
+
+            <!-- QUESTIONS 1 - 60 -->
+            
+            <!-- Question 1 -->
+            <div class="question-card" data-q="1">
+                <p class="text-lg font-semibold mb-3 text-gray-700">1. What is the primary benefit of using **HTTPS** over **HTTP**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q1" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Faster page load times due to better caching.</span></label>
+                    <label class="choice-label"><input type="radio" name="q1" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Native integration with Google Tag Manager (GTM).</span></label>
+                    <label class="choice-label"><input type="radio" name="q1" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Data encryption for security.</span></label>
+                    <label class="choice-label"><input type="radio" name="q1" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Guaranteed top-ranking on search engine results pages (SERPs).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" data-q="2">
+                <p class="text-lg font-semibold mb-3 text-gray-700">2. **UX (User Experience)** primarily focuses on which aspect of a product?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q2" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) The aesthetic visual elements and brand colors.</span></label>
+                    <label class="choice-label"><input type="radio" name="q2" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) The complexity of the backend code structure.</span></label>
+                    <label class="choice-label"><input type="radio" name="q2" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) The overall feeling and ease of use.</span></label>
+                    <label class="choice-label"><input type="radio" name="q2" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The implementation of tracking pixels and tags.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card" data-q="3">
+                <p class="text-lg font-semibold mb-3 text-gray-700">3. Which Web Accessibility principle ensures that all information and user interface components must be presentable to users in ways they can perceive?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q3" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Operable</span></label>
+                    <label class="choice-label"><input type="radio" name="q3" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Understandable</span></label>
+                    <label class="choice-label"><input type="radio" name="q3" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Robust</span></label>
+                    <label class="choice-label"><input type="radio" name="q3" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Perceivable</span></label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" data-q="4">
+                <p class="text-lg font-semibold mb-3 text-gray-700">4. What is the common term for the maximum number of concurrent users a website can handle before performance significantly degrades?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q4" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Load Time</span></label>
+                    <label class="choice-label"><input type="radio" name="q4" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Bandwidth</span></label>
+                    <label class="choice-label"><input type="radio" name="q4" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Latency</span></label>
+                    <label class="choice-label"><input type="radio" name="q4" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Capacity</span></label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" data-q="5">
+                <p class="text-lg font-semibold mb-3 text-gray-700">5. Which element is a fundamental component of **UI (User Interface)** design?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q5" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Creating a customer journey map.</span></label>
+                    <label class="choice-label"><input type="radio" name="q5" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Detailed user interviews.</span></label>
+                    <label class="choice-label"><input type="radio" name="q5" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Visual elements like buttons and typography.</span></label>
+                    <label class="choice-label"><input type="radio" name="q5" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Backend database architecture.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-card" data-q="6">
+                <p class="text-lg font-semibold mb-3 text-gray-700">6. A high **Core Web Vitals** score for **Largest Contentful Paint (LCP)** indicates what?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q6" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) The page is easily crawled and indexed by search engines.</span></label>
+                    <label class="choice-label"><input type="radio" name="q6" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) The page has minimal layout shift (visual stability).</span></label>
+                    <label class="choice-label"><input type="radio" name="q6" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) The main content of the page loads quickly.</span></label>
+                    <label class="choice-label"><input type="radio" name="q6" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The page becomes interactive very quickly.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-card" data-q="7">
+                <p class="text-lg font-semibold mb-3 text-gray-700">7. A website redirecting from `http://example.com` to `https://example.com` is an example of implementing which security measure?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q7" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Two-Factor Authentication (2FA)</span></label>
+                    <label class="choice-label"><input type="radio" name="q7" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Content Delivery Network (CDN)</span></label>
+                    <label class="choice-label"><input type="radio" name="q7" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Transport Layer Security (TLS)</span></label>
+                    <label class="choice-label"><input type="radio" name="q7" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Server-Side Rendering (SSR)</span></label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-card" data-q="8">
+                <p class="text-lg font-semibold mb-3 text-gray-700">8. Providing alternative text (**alt text**) for images is a technique used to support users with which impairment?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q8" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Motor skill impairment (difficulty clicking).</span></label>
+                    <label class="choice-label"><input type="radio" name="q8" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Cognitive impairment (difficulty reading complex text).</span></label>
+                    <label class="choice-label"><input type="radio" name="q8" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Visual impairment (using screen readers).</span></label>
+                    <label class="choice-label"><input type="radio" name="q8" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Auditory impairment (difficulty hearing audio).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-card" data-q="9">
+                <p class="text-lg font-semibold mb-3 text-gray-700">9. Best practice for an SEO **Title Tag** is to ensure it is unique, relevant, and includes the primary keyword and the...</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q9" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Exact location of the website's server.</span></label>
+                    <label class="choice-label"><input type="radio" name="q9" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Number of words on the page.</span></label>
+                    <label class="choice-label"><input type="radio" name="q9" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Brand Name.</span></label>
+                    <label class="choice-label"><input type="radio" name="q9" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Date of the last content update.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-card" data-q="10">
+                <p class="text-lg font-semibold mb-3 text-gray-700">10. The **Meta Description** does not directly affect search engine rankings but is crucial for which metric?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q10" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Domain Authority (DA).</span></label>
+                    <label class="choice-label"><input type="radio" name="q10" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Page Load Time (PLT).</span></label>
+                    <label class="choice-label"><input type="radio" name="q10" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Click-Through Rate (CTR).</span></label>
+                    <label class="choice-label"><input type="radio" name="q10" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) First Input Delay (FID).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question-card" data-q="11">
+                <p class="text-lg font-semibold mb-3 text-gray-700">11. **Long-tail keywords** are generally characterized by which combination?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q11" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) High search volume and high competition.</span></label>
+                    <label class="choice-label"><input type="radio" name="q11" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Low conversion rates and low search volume.</span></label>
+                    <label class="choice-label"><input type="radio" name="q11" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Lower search volume and higher conversion rates.</span></label>
+                    <label class="choice-label"><input type="radio" name="q11" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Short-tail phrasing and moderate competition.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question-card" data-q="12">
+                <p class="text-lg font-semibold mb-3 text-gray-700">12. What is a common local SEO practice utilized through **GEO Transformation**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q12" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Buying ads on global search engines.</span></label>
+                    <label class="choice-label"><input type="radio" name="q12" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Optimizing a Google Business Profile (GBP).</span></label>
+                    <label class="choice-label"><input type="radio" name="q12" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Using a generic, non-location-specific brand name.</span></label>
+                    <label class="choice-label"><input type="radio" name="q12" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Setting up a content delivery network (CDN).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question-card" data-q="13">
+                <p class="text-lg font-semibold mb-3 text-gray-700">13. When a search engine's crawler discovers a new page, the very first stage in the process of adding it to the index is called:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q13" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Rendering</span></label>
+                    <label class="choice-label"><input type="radio" name="q13" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Indexing</span></label>
+                    <label class="choice-label"><input type="radio" name="q13" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Ranking</span></label>
+                    <label class="choice-label"><input type="radio" name="q13" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Crawling</span></label>
+                </div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question-card" data-q="14">
+                <p class="text-lg font-semibold mb-3 text-gray-700">14. The term "**Rank-based keywords**" is most accurately described as keywords that are:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q14" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Only in the top 3 positions on the SERP.</span></label>
+                    <label class="choice-label"><input type="radio" name="q14" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Chosen based on a combination of search volume, competition, and current ranking position.</span></label>
+                    <label class="choice-label"><input type="radio" name="q14" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Keywords that require paid advertising to rank.</span></label>
+                    <label class="choice-label"><input type="radio" name="q14" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Keywords with zero search volume.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question-card" data-q="15">
+                <p class="text-lg font-semibold mb-3 text-gray-700">15. Which feature in **Google Search Console (GSC)** would a marketer use to submit a new page or updated content for expedited processing?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q15" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Performance Report.</span></label>
+                    <label class="choice-label"><input type="radio" name="q15" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Core Web Vitals Report.</span></label>
+                    <label class="choice-label"><input type="radio" name="q15" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) URL Inspection Tool and Request Indexing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q15" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Removals Tool.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question-card" data-q="16">
+                <p class="text-lg font-semibold mb-3 text-gray-700">16. A successful **technical SEO audit** will typically identify and resolve issues related to which of the following?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q16" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Social media content virality.</span></label>
+                    <label class="choice-label"><input type="radio" name="q16" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Customer service response time.</span></label>
+                    <label class="choice-label"><input type="radio" name="q16" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Indexability and Crawlability.</span></label>
+                    <label class="choice-label"><input type="radio" name="q16" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The price of competitor products.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question-card" data-q="17">
+                <p class="text-lg font-semibold mb-3 text-gray-700">17. What is the main purpose of a search engine's **ranking algorithm**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q17" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To charge advertisers for premium placement.</span></label>
+                    <label class="choice-label"><input type="radio" name="q17" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To identify and filter out all broken links (404 errors).</span></label>
+                    <label class="choice-label"><input type="radio" name="q17" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To order search results based on relevance and authority.</span></label>
+                    <label class="choice-label"><input type="radio" name="q17" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To store copies of all crawled web pages.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question-card" data-q="18">
+                <p class="text-lg font-semibold mb-3 text-gray-700">18. Which element is considered **on-page SEO**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q18" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A backlink from a high-authority third-party website.</span></label>
+                    <label class="choice-label"><input type="radio" name="q18" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Social media shares and likes on Facebook.</span></label>
+                    <label class="choice-label"><input type="radio" name="q18" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Meta Description.</span></label>
+                    <label class="choice-label"><input type="radio" name="q18" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Submitting the sitemap to every search engine.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question-card" data-q="19">
+                <p class="text-lg font-semibold mb-3 text-gray-700">19. Which HTML tag is often used for explicitly indicating a page's geographical area of relevance to search engines?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q19" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Canonical Tag</span></label>
+                    <label class="choice-label"><input type="radio" name="q19" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Robots Meta Tag</span></label>
+                    <label class="choice-label"><input type="radio" name="q19" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Hreflang Tag</span></label>
+                    <label class="choice-label"><input type="radio" name="q19" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Viewport Meta Tag</span></label>
+                </div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question-card" data-q="20">
+                <p class="text-lg font-semibold mb-3 text-gray-700">20. What is the recommended approximate character limit (or pixel width) for a search engine **Title Tag** to display fully on a SERP?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q20" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) 150-160 characters.</span></label>
+                    <label class="choice-label"><input type="radio" name="q20" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) 60 characters / 600 pixels.</span></label>
+                    <label class="choice-label"><input type="radio" name="q20" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) 250 characters / 1000 pixels.</span></label>
+                    <label class="choice-label"><input type="radio" name="q20" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) No limit; it always displays the full title.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 21 -->
+            <div class="question-card" data-q="21">
+                <p class="text-lg font-semibold mb-3 text-gray-700">21. What is the main function of **Google Tag Manager (GTM)**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q21" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To create and design website landing pages.</span></label>
+                    <label class="choice-label"><input type="radio" name="q21" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To generate automated reports on SEO keywords.</span></label>
+                    <label class="choice-label"><input type="radio" name="q21" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To manage and deploy tracking codes and tags without altering website code.</span></label>
+                    <label class="choice-label"><input type="radio" name="q21" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To host the website's static files (images, CSS).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 22 -->
+            <div class="question-card" data-q="22">
+                <p class="text-lg font-semibold mb-3 text-gray-700">22. In PPC (Pay-Per-Click) advertising, what is the formula for calculating **Quality Score** (or Relevance Score in Meta)?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q22" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Budget $\div$ Total Impressions.</span></label>
+                    <label class="choice-label"><input type="radio" name="q22" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Ad Relevance + Landing Page Experience + Expected CTR.</span></label>
+                    <label class="choice-label"><input type="radio" name="q22" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Total Conversions $\div$ Total Clicks.</span></label>
+                    <label class="choice-label"><input type="radio" name="q22" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Time on Site + Bounce Rate $\div$ Page Views.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 23 -->
+            <div class="question-card" data-q="23">
+                <p class="text-lg font-semibold mb-3 text-gray-700">23. What is the purpose of using a **Lookalike Audience** in Meta Ads?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q23" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To target users who have visited a competitor's website.</span></label>
+                    <label class="choice-label"><input type="radio" name="q23" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To find new people who are similar to your existing best customers.</span></label>
+                    <label class="choice-label"><input type="radio" name="q23" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To retarget users who abandoned their shopping carts.</span></label>
+                    <label class="choice-label"><input type="radio" name="q23" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To display ads only to people over the age of 50.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 24 -->
+            <div class="question-card" data-q="24">
+                <p class="text-lg font-semibold mb-3 text-gray-700">24. Which tool is primarily used for **behavioral data analysis** on a website (e.g., page views, session duration)?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q24" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Google Search Console (GSC).</span></label>
+                    <label class="choice-label"><input type="radio" name="q24" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Google Tag Manager (GTM).</span></label>
+                    <label class="choice-label"><input type="radio" name="q24" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Google Analytics.</span></label>
+                    <label class="choice-label"><input type="radio" name="q24" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Meta Ads Library.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 25 -->
+            <div class="question-card" data-q="25">
+                <p class="text-lg font-semibold mb-3 text-gray-700">25. What is the main use of the **Meta Ads Library**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q25" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To deploy the Meta Pixel for website tracking.</span></label>
+                    <label class="choice-label"><input type="radio" name="q25" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To build Lookalike Audiences from customer lists.</span></label>
+                    <label class="choice-label"><input type="radio" name="q25" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To manage all of a company's running campaigns.</span></label>
+                    <label class="choice-label"><input type="radio" name="q25" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To view all active and inactive ads run by any Page on Meta Platforms.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 26 -->
+            <div class="question-card" data-q="26">
+                <p class="text-lg font-semibold mb-3 text-gray-700">26. For a local business, what is the most critical function of an optimized **Google Business Profile (GBP)**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q26" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To serve as the primary e-commerce shopping platform.</span></label>
+                    <label class="choice-label"><input type="radio" name="q26" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To write and publish long-form articles.</span></label>
+                    <label class="choice-label"><input type="radio" name="q26" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To appear in the Google Maps 'Local Pack' results.</span></label>
+                    <label class="choice-label"><input type="radio" name="q26" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To manage the website's technical SEO (e.g., sitemaps).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 27 -->
+            <div class="question-card" data-q="27">
+                <p class="text-lg font-semibold mb-3 text-gray-700">27. A campaign that focuses on driving sales by displaying products to users who have previously viewed them on the website is known as:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q27" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Prospecting.</span></label>
+                    <label class="choice-label"><input type="radio" name="q27" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Retargeting/Remarketing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q27" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Cold Audience Targeting.</span></label>
+                    <label class="choice-label"><input type="radio" name="q27" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Affiliate Marketing.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 28 -->
+            <div class="question-card" data-q="28">
+                <p class="text-lg font-semibold mb-3 text-gray-700">28. What should be the **first and most critical step** when **choosing a platform** for a digital marketing strategy?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q28" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Analyzing the competitor's ad spending on all platforms.</span></label>
+                    <label class="choice-label"><input type="radio" name="q28" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Identifying the target audience and where they spend their time online.</span></label>
+                    <label class="choice-label"><input type="radio" name="q28" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Selecting the platform with the lowest cost-per-click (CPC).</span></label>
+                    <label class="choice-label"><input type="radio" name="q28" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Checking if the platform supports Google Tag Manager (GTM).</span></label>
+                </div>
+            </div>
+
+            <!-- Question 29 -->
+            <div class="question-card" data-q="29">
+                <p class="text-lg font-semibold mb-3 text-gray-700">29. What is the term for a set of user interactions that take place during a specific period of time on a website in Google Analytics?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q29" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Event</span></label>
+                    <label class="choice-label"><input type="radio" name="q29" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Conversion</span></label>
+                    <label class="choice-label"><input type="radio" name="q29" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) User</span></label>
+                    <label class="choice-label"><input type="radio" name="q29" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Session</span></label>
+                </div>
+            </div>
+
+            <!-- Question 30 -->
+            <div class="question-card" data-q="30">
+                <p class="text-lg font-semibold mb-3 text-gray-700">30. In GTM, a **Trigger** is defined as:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q30" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) The actual code snippet that sends data to an analytics platform.</span></label>
+                    <label class="choice-label"><input type="radio" name="q30" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) A variable that holds information to be used by a Tag.</span></label>
+                    <label class="choice-label"><input type="radio" name="q30" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) A condition that determines when a tag should fire.</span></label>
+                    <label class="choice-label"><input type="radio" name="q30" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) A container that holds all tags, triggers, and variables.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 31 -->
+            <div class="question-card" data-q="31">
+                <p class="text-lg font-semibold mb-3 text-gray-700">31. The fundamental difference between a **Display Ad** and a **Search Ad** is:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q31" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Display ads are always cheaper than search ads.</span></label>
+                    <label class="choice-label"><input type="radio" name="q31" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Search ads target intent-based queries; Display ads target users based on interests/behavior.</span></label>
+                    <label class="choice-label"><input type="radio" name="q31" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Display ads appear on the SERP; Search ads appear on third-party websites.</span></label>
+                    <label class="choice-label"><input type="radio" name="q31" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Display ads only use text; Search ads only use images.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 32 -->
+            <div class="question-card" data-q="32">
+                <p class="text-lg font-semibold mb-3 text-gray-700">32. Which type of content on a **Google Business Profile (GBP)** has a short expiry time and is best for time-sensitive promotions?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q32" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Business Description.</span></label>
+                    <label class="choice-label"><input type="radio" name="q32" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Logo and Cover Photo.</span></label>
+                    <label class="choice-label"><input type="radio" name="q32" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Reviews.</span></label>
+                    <label class="choice-label"><input type="radio" name="q32" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Posts.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 33 -->
+            <div class="question-card" data-q="33">
+                <p class="text-lg font-semibold mb-3 text-gray-700">33. In the **Customer Value Journey (CVJ)**, the goal of the **'Ascend'** stage is to:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q33" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Convert the prospect into a first-time buyer.</span></label>
+                    <label class="choice-label"><input type="radio" name="q33" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Increase the lifetime value of the customer through repeat purchases and higher-value offers.</span></label>
+                    <label class="choice-label"><input type="radio" name="q33" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Get the customer to refer the brand to friends and family.</span></label>
+                    <label class="choice-label"><input type="radio" name="q33" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Make the prospect aware of their problem.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 34 -->
+            <div class="question-card" data-q="34">
+                <p class="text-lg font-semibold mb-3 text-gray-700">34. What is a **Proto Persona**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q34" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A fully researched, data-driven profile of the ideal customer.</span></label>
+                    <label class="choice-label"><input type="radio" name="q34" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) A preliminary, educated guess about the ideal customer, based on existing knowledge and assumptions.</span></label>
+                    <label class="choice-label"><input type="radio" name="q34" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) An automated AI agent that interacts with users on a website.</span></label>
+                    <label class="choice-label"><input type="radio" name="q34" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) A security protocol for protecting user identity.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 35 -->
+            <div class="question-card" data-q="35">
+                <p class="text-lg font-semibold mb-3 text-gray-700">35. What is the main difference between the **Flywheel** model and the traditional **Funnel** model in marketing?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q35" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) The Flywheel focuses only on SEO; the Funnel focuses only on paid ads.</span></label>
+                    <label class="choice-label"><input type="radio" name="q35" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) The Funnel uses customers to drive growth; the Flywheel ignores existing customers.</span></label>
+                    <label class="choice-label"><input type="radio" name="q35" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) The Flywheel views customers as a source of energy for growth; the Funnel views them as a final output.</span></label>
+                    <label class="choice-label"><input type="radio" name="q35" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The Funnel is a static model; the Flywheel is only used for B2B marketing.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 36 -->
+            <div class="question-card" data-q="36">
+                <p class="text-lg font-semibold mb-3 text-gray-700">36. In a **SWOT Analysis**, what do **Opportunities** refer to?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q36" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Internal resources and advantages of the company.</span></label>
+                    <label class="choice-label"><input type="radio" name="q36" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Favorable external factors that a company can exploit to its advantage.</span></label>
+                    <label class="choice-label"><input type="radio" name="q36" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Internal limitations that hinder the achievement of objectives.</span></label>
+                    <label class="choice-label"><input type="radio" name="q36" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) External factors that could cause problems for the company.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 37 -->
+            <div class="question-card" data-q="37">
+                <p class="text-lg font-semibold mb-3 text-gray-700">37. The primary goal of a **Top-of-Funnel (TOFU)** marketing campaign is typically:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q37" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Securing a signed contract or final sale.</span></label>
+                    <label class="choice-label"><input type="radio" name="q37" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Building brand awareness and generating interest.</span></label>
+                    <label class="choice-label"><input type="radio" name="q37" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Converting a lead into a qualified sales opportunity.</span></label>
+                    <label class="choice-label"><input type="radio" name="q37" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Gathering competitor intelligence.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 38 -->
+            <div class="question-card" data-q="38">
+                <p class="text-lg font-semibold mb-3 text-gray-700">38. What is the main objective of a **Competitor Analysis** in digital marketing?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q38" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) To copy every ad and SEO strategy used by rivals.</span></label>
+                    <label class="choice-label"><input type="radio" name="q38" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) To exclusively identify the competitor's weakest products.</span></label>
+                    <label class="choice-label"><input type="radio" name="q38" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) To identify gaps in the market and uncover the strategies and tactics used by rivals.</span></label>
+                    <label class="choice-label"><input type="radio" name="q38" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) To set up a technical SEO audit on the competitor's website.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 39 -->
+            <div class="question-card" data-q="39">
+                <p class="text-lg font-semibold mb-3 text-gray-700">39. A customer-centric business model is one that focuses on maximizing:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q39" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Gross Revenue per Quarter (GRPQ).</span></label>
+                    <label class="choice-label"><input type="radio" name="q39" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Cost per Click (CPC).</span></label>
+                    <label class="choice-label"><input type="radio" name="q39" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Customer Lifetime Value (CLV).</span></label>
+                    <label class="choice-label"><input type="radio" name="q39" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Bounce Rate.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 40 -->
+            <div class="question-card" data-q="40">
+                <p class="text-lg font-semibold mb-3 text-gray-700">40. The marketing principle that uses scarcity (e.g., "Only 3 items left!") to drive immediate purchases is rooted in which psychological concept?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q40" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Cognitive Dissonance.</span></label>
+                    <label class="choice-label"><input type="radio" name="q40" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Confirmation Bias.</span></label>
+                    <label class="choice-label"><input type="radio" name="q40" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Fear of Missing Out (FOMO).</span></label>
+                    <label class="choice-label"><input type="radio" name="q40" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The Theory of Reciprocity.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 41 -->
+            <div class="question-card" data-q="41">
+                <p class="text-lg font-semibold mb-3 text-gray-700">41. Which stage of the **Customer Value Journey (CVJ)** transitions a lead from passively consuming content to actively engaging with the brand?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q41" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Aware</span></label>
+                    <label class="choice-label"><input type="radio" name="q41" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Convert</span></label>
+                    <label class="choice-label"><input type="radio" name="q41" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Engage</span></label>
+                    <label class="choice-label"><input type="radio" name="q41" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Promote</span></label>
+                </div>
+            </div>
+
+            <!-- Question 42 -->
+            <div class="question-card" data-q="42">
+                <p class="text-lg font-semibold mb-3 text-gray-700">42. **Threats** in a SWOT analysis are characterized as:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q42" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Controllable internal problems that affect efficiency.</span></label>
+                    <label class="choice-label"><input type="radio" name="q42" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Harmful external factors beyond the company's control.</span></label>
+                    <label class="choice-label"><input type="radio" name="q42" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Positive market trends a company can capitalize on.</span></label>
+                    <label class="choice-label"><input type="radio" name="q42" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Unique assets that give a competitive advantage.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 43 -->
+            <div class="question-card" data-q="43">
+                <p class="text-lg font-semibold mb-3 text-gray-700">43. Which type of competitor is the hardest to identify and analyze?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q43" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Primary Competitors (Direct).</span></label>
+                    <label class="choice-label"><input type="radio" name="q43" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Brand Competitors.</span></label>
+                    <label class="choice-label"><input type="radio" name="q43" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Budget Competitors.</span></label>
+                    <label class="choice-label"><input type="radio" name="q43" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Indirect Competitors.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 44 -->
+            <div class="question-card" data-q="44">
+                <p class="text-lg font-semibold mb-3 text-gray-700">44. Which economic theory suggests that a business should focus on what it does best and partner with others for non-core functions?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q44" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Theory of Rational Choice.</span></label>
+                    <label class="choice-label"><input type="radio" name="q44" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Comparative Advantage / Core Competency.</span></label>
+                    <label class="choice-label"><input type="radio" name="q44" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Supply and Demand Theory.</span></label>
+                    <label class="choice-label"><input type="radio" name="q44" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Behavioral Economics.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 45 -->
+            <div class="question-card" data-q="45">
+                <p class="text-lg font-semibold mb-3 text-gray-700">45. A **Scroll-Stopper** in social media advertising refers to a piece of content designed to achieve what primary goal?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q45" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Maximize the number of shares and comments on the ad.</span></label>
+                    <label class="choice-label"><input type="radio" name="q45" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Immediately capture the user's attention and stop them from scrolling past.</span></label>
+                    <label class="choice-label"><input type="radio" name="q45" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Provide all necessary information for a direct purchase.</span></label>
+                    <label class="choice-label"><input type="radio" name="q45" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Comply with all platform advertising policies.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 46 -->
+            <div class="question-card" data-q="46">
+                <p class="text-lg font-semibold mb-3 text-gray-700">46. Which advertising copy framework follows the sequence of **Problem, Agitate, Solve**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q46" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) AIDA</span></label>
+                    <label class="choice-label"><input type="radio" name="q46" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) PAS</span></label>
+                    <label class="choice-label"><input type="radio" name="q46" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) SWOT</span></label>
+                    <label class="choice-label"><input type="radio" name="q46" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) USP</span></label>
+                </div>
+            </div>
+
+            <!-- Question 47 -->
+            <div class="question-card" data-q="47">
+                <p class="text-lg font-semibold mb-3 text-gray-700">47. The phase where a marketing team systematically collects all performance data, summarizes key findings, and provides recommendations for the next cycle is called:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q47" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A/B Testing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q47" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Platform Analysis.</span></label>
+                    <label class="choice-label"><input type="radio" name="q47" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Audit, Indexing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q47" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Report, Documentation.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 48 -->
+            <div class="question-card" data-q="48">
+                <p class="text-lg font-semibold mb-3 text-gray-700">48. When conducting a **Platform Analysis**, the 'reach' metric measures:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q48" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) The total number of comments, likes, and shares received.</span></label>
+                    <label class="choice-label"><input type="radio" name="q48" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) The total cost of running ads on that platform.</span></label>
+                    <label class="choice-label"><input type="radio" name="q48" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) The total number of unique users who have seen the content.</span></label>
+                    <label class="choice-label"><input type="radio" name="q48" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) The average number of times a user saw the content.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 49 -->
+            <div class="question-card" data-q="49">
+                <p class="text-lg font-semibold mb-3 text-gray-700">49. In project management, what is a **PreTask**?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q49" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A task that can be completed at any point in the project timeline.</span></label>
+                    <label class="choice-label"><input type="radio" name="q49" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) The final documentation and archiving of project files.</span></label>
+                    <label class="choice-label"><input type="radio" name="q49" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) A mandatory activity that must be completed before the main task can begin.</span></label>
+                    <label class="choice-label"><input type="radio" name="q49" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) A supplementary task that improves the quality but is not essential for completion.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 50 -->
+            <div class="question-card" data-q="50">
+                <p class="text-lg font-semibold mb-3 text-gray-700">50. The use of visual hierarchy and F-patterns in design primarily improves:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q50" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Load Time and server response speed.</span></label>
+                    <label class="choice-label"><input type="radio" name="q50" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Compliance with Web Accessibility standards for users with visual impairment.</span></label>
+                    <label class="choice-label"><input type="radio" name="q50" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Scanability and Comprehension.</span></label>
+                    <label class="choice-label"><input type="radio" name="q50" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Search engine indexability of the content.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 51 -->
+            <div class="question-card" data-q="51">
+                <p class="text-lg font-semibold mb-3 text-gray-700">51. A crucial **PostTask** following a successful Meta Ads campaign would typically be:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q51" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Setting up the Google Tag Manager container.</span></label>
+                    <label class="choice-label"><input type="radio" name="q51" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Adding converting customers to a new source audience for future retargeting or lookalike campaigns.</span></label>
+                    <label class="choice-label"><input type="radio" name="q51" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Creating the Proto Persona for the next product launch.</span></label>
+                    <label class="choice-label"><input type="radio" name="q51" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Re-auditing the website for broken links.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 52 -->
+            <div class="question-card" data-q="52">
+                <p class="text-lg font-semibold mb-3 text-gray-700">52. In the context of digital marketing, an **AI Agent** is best defined as:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q52" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A human customer service representative who uses AI tools.</span></label>
+                    <label class="choice-label"><input type="radio" name="q52" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) An external consultant specializing in artificial intelligence marketing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q52" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Autonomous software designed to perform specific, goal-oriented tasks (e.g., ad optimization, content personalization).</span></label>
+                    <label class="choice-label"><input type="radio" name="q52" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) A static tool used only for generating stock images.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 53 -->
+            <div class="question-card" data-q="53">
+                <p class="text-lg font-semibold mb-3 text-gray-700">53. A predicted shift in the **Future of Digital Marketing** is the move toward a greater focus on:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q53" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Eliminating all data tracking and analytics tools.</span></label>
+                    <label class="choice-label"><input type="radio" name="q53" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Privacy-preserving techniques and zero-party data.</span></label>
+                    <label class="choice-label"><input type="radio" name="q53" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Relying exclusively on third-party data collection.</span></label>
+                    <label class="choice-label"><input type="radio" name="q53" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Decreasing investment in personalization and segmentation.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 54 -->
+            <div class="question-card" data-q="54">
+                <p class="text-lg font-semibold mb-3 text-gray-700">54. What concept describes a consumer's tendency to select and prefer information that confirms their existing beliefs or hypotheses?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q54" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Anchoring Bias.</span></label>
+                    <label class="choice-label"><input type="radio" name="q54" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Confirmation Bias.</span></label>
+                    <label class="choice-label"><input type="radio" name="q54" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) A/B Testing.</span></label>
+                    <label class="choice-label"><input type="radio" name="q54" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Law of Reciprocity.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 55 -->
+            <div class="question-card" data-q="55">
+                <p class="text-lg font-semibold mb-3 text-gray-700">55. In digital marketing, **Being Convenient** often means reducing the number of steps a user must take to achieve a desired outcome, which is a focus on:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q55" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) A high Frequency score.</span></label>
+                    <label class="choice-label"><input type="radio" name="q55" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Maximizing ad budget.</span></label>
+                    <label class="choice-label"><input type="radio" name="q55" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Minimizing friction in the conversion path.</span></label>
+                    <label class="choice-label"><input type="radio" name="q55" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Implementing a new protocol like HTTP/3.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 56 -->
+            <div class="question-card" data-q="56">
+                <p class="text-lg font-semibold mb-3 text-gray-700">56. The initial process of ensuring all tracking codes, pixels, and analytics are correctly installed and verified before launching a campaign is called:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q56" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Load Time Optimization.</span></label>
+                    <label class="choice-label"><input type="radio" name="q56" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Competitor Analysis.</span></label>
+                    <label class="choice-label"><input type="radio" name="q56" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Environment Set-up (or Tag Implementation/Testing).</span></label>
+                    <label class="choice-label"><input type="radio" name="q56" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Final Documentation.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 57 -->
+            <div class="question-card" data-q="57">
+                <p class="text-lg font-semibold mb-3 text-gray-700">57. Which marketing psychology principle involves offering a customer something free or of value first, which creates a sense of obligation to reciprocate?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q57" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Consistency and Commitment.</span></label>
+                    <label class="choice-label"><input type="radio" name="q57" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Authority.</span></label>
+                    <label class="choice-label"><input type="radio" name="q57" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Reciprocity.</span></label>
+                    <label class="choice-label"><input type="radio" name="q57" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Social Proof.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 58 -->
+            <div class="question-card" data-q="58">
+                <p class="text-lg font-semibold mb-3 text-gray-700">58. The rise of **Voice Search** is fundamentally changing SEO by increasing the importance of:</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q58" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Short, fragmented keyword phrases.</span></label>
+                    <label class="choice-label"><input type="radio" name="q58" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Conversational, long-tail, question-based keywords.</span></label>
+                    <label class="choice-label"><input type="radio" name="q58" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Optimizing for Flash media and animations.</span></label>
+                    <label class="choice-label"><input type="radio" name="q58" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Focusing solely on the homepage content.</span></label>
+                </div>
+            </div>
+
+            <!-- Question 59 -->
+            <div class="question-card" data-q="59">
+                <p class="text-lg font-semibold mb-3 text-gray-700">59. According to the **Diffusion of Innovations** theory, which group of people is the first to adopt a new product or service?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q59" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Early Majority</span></label>
+                    <label class="choice-label"><input type="radio" name="q59" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Innovators</span></label>
+                    <label class="choice-label"><input type="radio" name="q59" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Laggards</span></label>
+                    <label class="choice-label"><input type="radio" name="q59" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Early Adopters</span></label>
+                </div>
+            </div>
+
+            <!-- Question 60 -->
+            <div class="question-card" data-q="60">
+                <p class="text-lg font-semibold mb-3 text-gray-700">60. Which philosophical/psychological concept underpins the marketing strategy of segmenting customers by their decision-making processes and beliefs?</p>
+                <div class="space-y-2">
+                    <label class="choice-label"><input type="radio" name="q60" value="A"><span class="w-full border border-gray-200 bg-white rounded-md p-3">A) Classical Economics.</span></label>
+                    <label class="choice-label"><input type="radio" name="q60" value="B"><span class="w-full border border-gray-200 bg-white rounded-md p-3">B) Web Accessibility.</span></label>
+                    <label class="choice-label"><input type="radio" name="q60" value="C"><span class="w-full border border-gray-200 bg-white rounded-md p-3">C) Behavioral Economics.</span></label>
+                    <label class="choice-label"><input type="radio" name="q60" value="D"><span class="w-full border border-gray-200 bg-white rounded-md p-3">D) Agile Development.</span></label>
+                </div>
+            </div>
+            
+            <!-- Score Display & Submission Button -->
+            <div id="results-display" class="hidden p-4 mt-6 text-center text-xl font-bold bg-green-100 border border-green-400 text-green-700 rounded-lg shadow-md">
+                <!-- Results will be displayed here -->
+            </div>
+            
+            <button type="submit" id="submitButton" class="submit-button w-full py-4 mt-8 text-white font-extrabold text-xl bg-purple-600 rounded-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-400">
+                Submit Quiz and Calculate Final Score
+            </button>
+        </form>
+
+        <div id="submission-message" class="hidden p-6 mt-8 text-center bg-blue-100 border-2 border-blue-400 text-blue-700 rounded-xl shadow-lg">
+            <p class="text-2xl font-bold mb-2">✅ Submission Successful!</p>
+            <p class="text-lg">Your answers and score have been recorded by Netlify Forms.</p>
+            <p class="text-sm font-normal mt-3 text-gray-600">You can now view your score above.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- QUIZ LOGIC AND SCORING ---
+
+        // Define scoring parameters
+        const TOTAL_QUESTIONS = 60;
+        const MARKS_FOR_CORRECT = 100 / TOTAL_QUESTIONS; // approx 1.6667
+        const MARKS_FOR_INCORRECT = -0.5;
+        const MARKS_FOR_UNATTEMPTED = 0;
+
+        // Define the correct answers for scoring
+        const CORRECT_ANSWERS = {
+            q1: 'C', q2: 'C', q3: 'D', q4: 'D', q5: 'C', q6: 'C', q7: 'C', q8: 'C', q9: 'C', q10: 'C',
+            q11: 'C', q12: 'B', q13: 'D', q14: 'B', q15: 'C', q16: 'C', q17: 'C', q18: 'C', q19: 'C', q20: 'B',
+            q21: 'C', q22: 'B', q23: 'B', q24: 'C', q25: 'D', q26: 'C', q27: 'B', q28: 'B', q29: 'D', q30: 'C',
+            q31: 'B', q32: 'D', q33: 'B', q34: 'B', q35: 'C', q36: 'B', q37: 'B', q38: 'C', q39: 'C', q40: 'C',
+            q41: 'C', q42: 'B', q43: 'D', q44: 'B', q45: 'B', q46: 'B', q47: 'D', q48: 'C', q49: 'C', q50: 'C',
+            q51: 'B', q52: 'C', q53: 'B', q54: 'B', q55: 'C', q56: 'C', q57: 'C', q58: 'B', q59: 'B', q60: 'C'
+        };
+
+        const quizForm = document.getElementById('quizForm');
+        const finalScoreInput = document.getElementById('finalScoreInput');
+        const resultsDisplay = document.getElementById('results-display');
+        const submissionMessage = document.getElementById('submission-message');
+        
+        /**
+         * Calculates the score based on the user's selected answers, applying negative marking.
+         * @returns {number} The calculated score, rounded to two decimal places.
+         */
+        function calculateScore() {
+            let totalScore = 0;
+            const formData = new FormData(quizForm);
+
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                const questionKey = `q${i}`;
+                const correctAnswer = CORRECT_ANSWERS[questionKey];
+                
+                // Get the user's selected answer for the current question
+                const userAnswer = formData.get(questionKey);
+
+                if (userAnswer) {
+                    if (userAnswer === correctAnswer) {
+                        totalScore += MARKS_FOR_CORRECT;
+                    } else {
+                        totalScore += MARKS_FOR_INCORRECT; // Negative marking
+                    }
+                }
+                // If unanswered (null or empty), it remains 0 (MARKS_FOR_UNATTEMPTED)
+            }
+            // Round the score to two decimal places for display
+            return parseFloat(totalScore.toFixed(2));
+        }
+
+        /**
+         * Handles the form submission process (calculates score, updates hidden field, submits to Netlify).
+         * @param {Event} event The submission event.
+         */
+        function handleSubmit(event) {
+            event.preventDefault(); // Stop the default browser submission first
+
+            // 1. Calculate Score
+            const finalScore = calculateScore();
+            
+            // 2. Update the hidden field with the calculated score (CRITICAL for Netlify data capture)
+            finalScoreInput.value = finalScore;
+
+            // 3. Display the score to the user immediately
+            displayResults(finalScore);
+
+            // 4. Submit the form to Netlify using the Fetch API
+            const formData = new FormData(quizForm);
+            
+            fetch(quizForm.action, {
+                method: quizForm.method,
+                body: formData,
+                headers: {
+                    // Netlify Forms requires this header for AJAX submissions
+                    'Accept': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    showSuccessMessage();
+                } else {
+                    // Use console.error instead of alert for non-blocking error display
+                    console.error('Netlify form submission failed with status:', response.status);
+                    
+                }
+            })
+            .catch(error => {
+                console.error('Submission error:', error);
+            });
+
+            return false; // Prevent traditional form submission
+        }
+
+        /**
+         * Shows the user their results on the page and locks the form.
+         * @param {number} score The user's score.
+         */
+        function displayResults(score) {
+            const maxScore = 100;
+            
+            resultsDisplay.innerHTML = `Final Calculated Score: <span class="text-3xl font-extrabold">${score} / ${maxScore}</span>`;
+            resultsDisplay.classList.remove('hidden');
+            
+            // Dynamic styling based on score percentage
+            const percentage = score / maxScore;
+            
+            // Reset classes
+            resultsDisplay.className = 'p-4 mt-6 text-center text-xl font-bold rounded-lg shadow-md';
+            
+            if (percentage >= 0.8) {
+                resultsDisplay.classList.add('bg-lime-100', 'border', 'border-lime-500', 'text-lime-700');
+            } else if (percentage >= 0.5) {
+                resultsDisplay.classList.add('bg-yellow-100', 'border', 'border-yellow-500', 'text-yellow-700');
+            } else if (percentage >= 0.0) {
+                 resultsDisplay.classList.add('bg-orange-100', 'border', 'border-orange-500', 'text-orange-700');
+            } else {
+                resultsDisplay.classList.add('bg-red-100', 'border', 'border-red-500', 'text-red-700');
+            }
+            
+            // Disable and update button
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('submitButton').textContent = 'Assessment Completed';
+            document.getElementById('submitButton').classList.remove('bg-purple-600');
+            document.getElementById('submitButton').classList.add('bg-gray-400');
+        }
+
+        /**
+         * Shows the final success message after successful Netlify submission.
+         */
+        function showSuccessMessage() {
+            submissionMessage.classList.remove('hidden');
+            quizForm.style.display = 'none'; // Hide the form after submission
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+    </script>
+</body>
+</html>
